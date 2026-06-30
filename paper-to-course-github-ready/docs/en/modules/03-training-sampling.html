@@ -1,0 +1,69 @@
+<section class="module" id="module-3">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">Training and sampling mirror each other</h1>
+      <p class="module-subtitle">Training asks: can the network identify the noise that was added? Sampling asks: can the network remove noise step by step to create a future?</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Figure 1: the full method in one picture</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 1</span>
+          <img src="paper-assets/figure1-timegrad-schematic.png" alt="TimeGrad schematic" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Bottom: the RNN receives the previous observation and covariates.</p>
+            <p class="tl">Middle: hidden state h conditions the diffusion reverse model.</p>
+            <p class="tl">Top: the fixed forward chain adds noise; the learned reverse chain removes it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Algorithm 2 in plain language</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">ALGORITHM</span>
+          <img src="paper-assets/algorithm2-sampling.png" alt="Algorithm 2 sampling process" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">Start from random noise at the highest diffusion level.</p>
+            <p class="tl">Move backward through the noise levels and use epsilon_theta to choose a denoising direction.</p>
+            <p class="tl">Except for the final step, inject a small random term to preserve uncertainty.</p>
+            <p class="tl">The output is one sampled future vector for time t.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-info">
+        <div class="callout-icon">i</div>
+        <div class="callout-content">
+          <strong class="callout-title">Sampling cost is part of the method</strong>
+          <p>The model needs many reverse steps, and often many sampled trajectories. That is why the ablation on diffusion length N matters.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module3">
+        <div class="quiz-question-block" data-correct="option-a" data-explanation-right="Fewer trajectories make empirical quantiles and distribution scores noisier." data-explanation-wrong="S affects inference-time sampling estimates, not the number of trained parameters or whether the training loss exists.">
+          <h3 class="quiz-question">If inference uses only 5 sampled trajectories instead of 100, what is most likely to degrade first?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Prediction intervals and CRPS estimates become less stable.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The model loses most of its parameters.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The training loss can no longer be computed.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>

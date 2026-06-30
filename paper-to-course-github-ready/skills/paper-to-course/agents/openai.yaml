@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper to Course"
+  short_description: "Turn papers into interactive courses"
+  default_prompt: "Use $paper-to-course to turn this paper into an interactive course."

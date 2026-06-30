@@ -1,0 +1,66 @@
+<section class="module" id="module-1">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">为什么需要 TimeGrad</h1>
+      <p class="module-subtitle">这篇论文想解决的不是“点预测更准一点”，而是：很多条相关时间序列一起预测时，怎样生成完整的未来概率分布。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">这篇论文的核心思路</h2>
+      <div class="pattern-cards">
+        <div class="pattern-card" style="border-top-color: var(--color-actor-1)">
+          <div class="pattern-icon" style="background: var(--color-actor-1)">P</div>
+          <h4 class="pattern-title">问题</h4>
+          <p class="pattern-desc">未来某个时间点是一个高维向量，不是一个孤立数字。太阳能站点、交通传感器、网页访问量都会一起波动。</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-2)">
+          <div class="pattern-icon" style="background: var(--color-actor-2)">G</div>
+          <h4 class="pattern-title">Gap</h4>
+          <p class="pattern-desc">很多模型会预设一个输出分布族，比如 Gaussian、copula 或 flow。这样概率密度容易算，但未来分布的形状也被限制住了。</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-5)">
+          <div class="pattern-icon" style="background: var(--color-actor-5)">M</div>
+          <h4 class="pattern-title">做法</h4>
+          <p class="pattern-desc">TimeGrad 在每个未来时间步使用一个条件 <span class="term" data-definition="扩散模型学习如何反转逐步加噪的过程。在这里，它把随机噪声变成一个可能的未来向量。">diffusion model</span>。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">把论文主张翻译成人话</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">论文主张</span>
+          <pre><code><span class="code-line">用自回归 RNN 状态</span>
+<span class="code-line">条件化一个去噪扩散模型</span>
+<span class="code-line">从而采样多变量未来分布</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">RNN 负责判断：当前时间序列处在什么上下文里。</p>
+            <p class="tl">扩散网络负责判断：怎样把噪声变成一个合理的未来向量。</p>
+            <p class="tl">重复采样很多次，就能得到很多条可能未来，不确定性也就显现出来了。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module1">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。TimeGrad 的核心优势是灵活的联合概率预测，不是更快地产生一个点预测。" data-explanation-wrong="再想想：TimeGrad 建模的是普通点预测没有覆盖的哪一部分？">
+          <h3 class="quiz-question">如果一个团队只需要明天平均用电量这一个数，TimeGrad 哪个优势最不关键？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能读取滞后时间特征。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能采样灵活的多变量未来分布。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能使用历史上下文。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

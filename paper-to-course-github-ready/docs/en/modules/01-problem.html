@@ -1,0 +1,66 @@
+<section class="module" id="module-1">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">Why TimeGrad exists</h1>
+      <p class="module-subtitle">This paper is not mainly asking for a slightly better point forecast. It asks how to generate a full future probability distribution for many correlated time series at once.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">The paper's core idea</h2>
+      <div class="pattern-cards">
+        <div class="pattern-card" style="border-top-color: var(--color-actor-1)">
+          <div class="pattern-icon" style="background: var(--color-actor-1)">P</div>
+          <h4 class="pattern-title">Problem</h4>
+          <p class="pattern-desc">A future time step is a high-dimensional vector, not one isolated number. Solar sites, traffic sensors, and web pages move together.</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-2)">
+          <div class="pattern-icon" style="background: var(--color-actor-2)">G</div>
+          <h4 class="pattern-title">Gap</h4>
+          <p class="pattern-desc">Many models assume an output family such as Gaussian, copula, or flow. That makes density computation easier, but it can restrict the shape of the future distribution.</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-5)">
+          <div class="pattern-icon" style="background: var(--color-actor-5)">M</div>
+          <h4 class="pattern-title">Move</h4>
+          <p class="pattern-desc">TimeGrad uses a conditional <span class="term" data-definition="A diffusion model learns to reverse a gradual noising process. Here, it turns random noise into a plausible future vector.">diffusion model</span> at each future time step.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Translate the claim</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">PAPER CLAIM</span>
+          <pre><code><span class="code-line">Use an autoregressive RNN state</span>
+<span class="code-line">to condition a denoising diffusion model</span>
+<span class="code-line">and sample the multivariate future.</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">The RNN tells the model what situation the series is currently in.</p>
+            <p class="tl">The diffusion network tells the model how to turn noise into a plausible future vector.</p>
+            <p class="tl">Repeat the sampling process many times, and uncertainty becomes visible as many possible futures.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module1">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="TimeGrad's central advantage is flexible joint probabilistic forecasting, not faster point prediction." data-explanation-wrong="Ask what TimeGrad models that a simple point forecast does not.">
+          <h3 class="quiz-question">A team only needs tomorrow's average electricity demand as one number. Which TimeGrad advantage matters least?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can read lagged time features.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can sample a flexible multivariate future distribution.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can use historical context.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>

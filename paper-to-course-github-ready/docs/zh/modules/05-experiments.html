@@ -1,0 +1,80 @@
+<section class="module" id="module-5">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">实验中的证据链怎么读</h1>
+      <p class="module-subtitle">实验结果支持 TimeGrad 是一个强概率预测器，尤其是在使用分布感知指标评估时。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">先看数据规模</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">表 1</span>
+          <img src="paper-assets/table1-datasets.png" alt="数据集表格" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读表指南</span>
+          <div class="translation-lines">
+            <p class="tl">维度 D 从 8 到 2000 不等。</p>
+            <p class="tl">数据频率包括日级、小时级和 30 分钟级。</p>
+            <p class="tl">预测长度是 24 或 30 步，所以样本必须形成完整未来路径。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">再读基准测试表</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">表 2</span>
+          <img src="paper-assets/table2-crps.png" alt="CRPS 对比表" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">证据链</span>
+          <div class="translation-lines">
+            <p class="tl">主张：灵活采样能改善多变量概率预测。</p>
+            <p class="tl">指标：<span class="term" data-definition="CRPS 衡量预测分布和真实观测值的匹配程度，数值越低越好。">CRPS_sum</span>，一种分布评分。</p>
+            <p class="tl">结果：TimeGrad 在多数数据集上最好或接近最好。</p>
+            <p class="tl">注意：这张表没有衡量延迟或内存成本。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">消融：扩散步数要多少？</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 3</span>
+          <img src="paper-assets/figure3-diffusion-length.png" alt="扩散长度消融实验" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">它证明了什么</span>
+          <div class="translation-lines">
+            <p class="tl">当 N 从很小的值增大时，预测质量明显改善。</p>
+            <p class="tl">论文报告说，N 约等于 10 时已经有不错表现。</p>
+            <p class="tl">最优设置大约在 N = 100，但更大并不自动更好。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module5">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="对。表 2 是质量证据；真实部署还需要成本和校准证据。" data-explanation-wrong="漂亮图能帮助直觉，但最缺的是质量和成本之间的权衡证据。">
+          <h3 class="quiz-question">如果一家公司想在线部署 TimeGrad，表 2 最缺哪类证据？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>只需要更多定性预测截图。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>需要重新定义什么叫时间序列。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>延迟、采样成本，以及部署约束下的校准表现。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

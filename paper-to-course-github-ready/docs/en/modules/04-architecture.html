@@ -1,0 +1,66 @@
+<section class="module" id="module-4">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">Architecture breakdown</h1>
+      <p class="module-subtitle">TimeGrad has two cooperating parts: an autoregressive context model and a conditional denoising network.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Click the components</h2>
+      <div class="arch-diagram">
+        <div class="arch-zone">
+          <h4 class="arch-zone-label">Forecasting pipeline</h4>
+          <div class="arch-component" data-desc="Historical windows, lag features, known time features, and optional entity embeddings enter the context model." onclick="showArchDesc(this)">
+            <div class="arch-icon">H</div><span>Inputs</span>
+          </div>
+          <div class="arch-component" data-desc="The LSTM compresses the past into h_{t-1}, which conditions each future denoising process." onclick="showArchDesc(this)">
+            <div class="arch-icon">R</div><span>RNN</span>
+          </div>
+          <div class="arch-component" data-desc="The residual ConvNet predicts noise epsilon at a given diffusion level n." onclick="showArchDesc(this)">
+            <div class="arch-icon">D</div><span>Denoiser</span>
+          </div>
+          <div class="arch-component" data-desc="Multiple sampled trajectories are summarized into medians, prediction intervals, and CRPS estimates." onclick="showArchDesc(this)">
+            <div class="arch-icon">Q</div><span>Quantiles</span>
+          </div>
+        </div>
+        <div class="arch-description" id="arch-desc">Click any component to learn what it does.</div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Residual block details</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 2</span>
+          <img src="paper-assets/figure2-residual-block.png" alt="Residual block architecture" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">The noisy vector enters through convolutional layers.</p>
+            <p class="tl">The diffusion index n is embedded so the network knows the current noise level.</p>
+            <p class="tl">The RNN state h is injected as conditioning information.</p>
+            <p class="tl">Residual and skip paths help deep denoising blocks remain trainable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module4">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="The diffusion chain can still exist, but it is no longer conditioned on the current temporal context." data-explanation-wrong="The main loss is conditional context, not the existence of Gaussian noise or the CRPS formula.">
+          <h3 class="quiz-question">If h_{t-1} is removed from the denoising network, what is the cleanest failure interpretation?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The model cannot add Gaussian noise.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The reverse process no longer knows the current history.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>All dataset dimensions must become 1.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>

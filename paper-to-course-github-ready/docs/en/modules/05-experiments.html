@@ -1,0 +1,80 @@
+<section class="module" id="module-5">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">How the evidence works</h1>
+      <p class="module-subtitle">The experiments support TimeGrad as a strong probabilistic forecaster, especially when evaluated with distribution-aware metrics.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">First inspect the data scale</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">TABLE 1</span>
+          <img src="paper-assets/table1-datasets.png" alt="Dataset table" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Dimension D ranges from 8 to 2000.</p>
+            <p class="tl">Frequencies include daily, hourly, and 30-minute data.</p>
+            <p class="tl">Prediction lengths are 24 or 30 steps, so samples must form full future paths.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Then read the benchmark table</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">TABLE 2</span>
+          <img src="paper-assets/table2-crps.png" alt="CRPS comparison table" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">EVIDENCE CHAIN</span>
+          <div class="translation-lines">
+            <p class="tl">Claim: flexible sampling improves multivariate probabilistic forecasts.</p>
+            <p class="tl">Metric: <span class="term" data-definition="CRPS measures how well a predicted distribution matches the observed value. Lower is better.">CRPS_sum</span>, a distribution score.</p>
+            <p class="tl">Result: TimeGrad is best or near-best on most datasets.</p>
+            <p class="tl">Caveat: the table does not measure latency or memory cost.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Ablation: how many diffusion steps?</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 3</span>
+          <img src="paper-assets/figure3-diffusion-length.png" alt="Diffusion length ablation" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">WHAT IT SHOWS</span>
+          <div class="translation-lines">
+            <p class="tl">Quality improves sharply as N grows from very small values.</p>
+            <p class="tl">The paper reports good performance already around N = 10.</p>
+            <p class="tl">The best setting is around N = 100, but larger is not automatically better.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module5">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="Table 2 is quality evidence; real deployment also needs cost and calibration evidence." data-explanation-wrong="Pretty plots help intuition, but the missing evidence is the quality-cost tradeoff.">
+          <h3 class="quiz-question">A company wants to deploy TimeGrad online. What evidence is most missing from Table 2?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Only more qualitative prediction screenshots.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>A new definition of time series.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Latency, sampling cost, and calibration under deployment constraints.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>

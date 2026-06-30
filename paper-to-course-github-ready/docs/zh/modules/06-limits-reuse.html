@@ -1,0 +1,64 @@
+<section class="module" id="module-6">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">边界、复现和复用</h1>
+      <p class="module-subtitle">这个方法很强，但证据必须和假设一起搬走：自回归采样、baseline 选择、预处理方式、扩散超参数都不能被忽略。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">预测区间有用，但不是完整证明</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 4</span>
+          <img src="paper-assets/figure4-prediction-intervals.png" alt="预测区间图" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读图指南</span>
+          <div class="translation-lines">
+            <p class="tl">蓝色线是真实观测；绿色带是预测区间。</p>
+            <p class="tl">这张图说明模型输出的是不确定性区间，而不只是中位数曲线。</p>
+            <p class="tl">它是定性证据。更强的结论仍然依赖跨数据集的 CRPS 结果。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">复现清单</h2>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">Data</code><span class="badge-desc">数据集版本、rolling window、缩放、缺失值、训练/验证/测试边界</span></div>
+        <div class="badge-item"><code class="badge-code">Model</code><span class="badge-desc">LSTM hidden size、残差块、dilation schedule、embedding、lag features</span></div>
+        <div class="badge-item"><code class="badge-code">Diffusion</code><span class="badge-desc">噪声 schedule、扩散长度 N、采样轨迹数 S、随机种子</span></div>
+        <div class="badge-item"><code class="badge-code">Eval</code><span class="badge-desc">CRPS_sum 实现、baseline 实现、重复运行统计方式</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">这篇论文没有证明什么</h2>
+      <div class="callout callout-warning">
+        <div class="callout-icon">!</div>
+        <div class="callout-content">
+          <strong class="callout-title">边界检查</strong>
+          <p>它没有证明 TimeGrad 总是更快、在所有领域总是更好，也没有证明它已经能稳健处理极端事件和分布漂移。它证明的是：在论文测试设定下，自回归扩散预测是一个很强的基准方法。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module6">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。复用不是照搬结论，而是在新领域重建证据链。" data-explanation-wrong="一条训练曲线或照搬旧表格，不能验证新的部署场景。">
+          <h3 class="quiz-question">如果你想把 TimeGrad 用到数据中心能耗预测，第一轮负责任的验证方案是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>只检查训练 loss 是否下降。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>比较 baseline、分布指标、校准、采样成本和异常时段表现。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>直接把 Electricity 结果当作证明，不做新测试。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module6')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module6')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

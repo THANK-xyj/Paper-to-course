@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeGrad Interactive Paper Course</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --color-accent:       #2A7B9B;
+      --color-accent-hover: #1F6280;
+      --color-accent-light: #E4F2F7;
+      --color-accent-muted: #5A9DB8;
+    }
+  </style>
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="nav-inner">
+      <span class="nav-title">TimeGrad Paper Course</span>
+      <div class="nav-dots" id="nav-dots" role="tablist">
+        <button class="nav-dot" data-target="module-1" data-tooltip="Why TimeGrad exists" role="tab" aria-label="Module 1: Why TimeGrad exists"></button>
+        <button class="nav-dot" data-target="module-2" data-tooltip="Diffusion as a forecast engine" role="tab" aria-label="Module 2: Diffusion as a forecast engine"></button>
+        <button class="nav-dot" data-target="module-3" data-tooltip="Training and sampling" role="tab" aria-label="Module 3: Training and sampling"></button>
+        <button class="nav-dot" data-target="module-4" data-tooltip="Architecture breakdown" role="tab" aria-label="Module 4: Architecture breakdown"></button>
+        <button class="nav-dot" data-target="module-5" data-tooltip="Experiments and evidence" role="tab" aria-label="Module 5: Experiments and evidence"></button>
+        <button class="nav-dot" data-target="module-6" data-tooltip="Limits and reuse" role="tab" aria-label="Module 6: Limits and reuse"></button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+<section class="module" id="module-1">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">Why TimeGrad exists</h1>
+      <p class="module-subtitle">This paper is not mainly asking for a slightly better point forecast. It asks how to generate a full future probability distribution for many correlated time series at once.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">The paper's core idea</h2>
+      <div class="pattern-cards">
+        <div class="pattern-card" style="border-top-color: var(--color-actor-1)">
+          <div class="pattern-icon" style="background: var(--color-actor-1)">P</div>
+          <h4 class="pattern-title">Problem</h4>
+          <p class="pattern-desc">A future time step is a high-dimensional vector, not one isolated number. Solar sites, traffic sensors, and web pages move together.</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-2)">
+          <div class="pattern-icon" style="background: var(--color-actor-2)">G</div>
+          <h4 class="pattern-title">Gap</h4>
+          <p class="pattern-desc">Many models assume an output family such as Gaussian, copula, or flow. That makes density computation easier, but it can restrict the shape of the future distribution.</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-5)">
+          <div class="pattern-icon" style="background: var(--color-actor-5)">M</div>
+          <h4 class="pattern-title">Move</h4>
+          <p class="pattern-desc">TimeGrad uses a conditional <span class="term" data-definition="A diffusion model learns to reverse a gradual noising process. Here, it turns random noise into a plausible future vector.">diffusion model</span> at each future time step.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Translate the claim</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">PAPER CLAIM</span>
+          <pre><code><span class="code-line">Use an autoregressive RNN state</span>
+<span class="code-line">to condition a denoising diffusion model</span>
+<span class="code-line">and sample the multivariate future.</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">The RNN tells the model what situation the series is currently in.</p>
+            <p class="tl">The diffusion network tells the model how to turn noise into a plausible future vector.</p>
+            <p class="tl">Repeat the sampling process many times, and uncertainty becomes visible as many possible futures.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module1">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="TimeGrad's central advantage is flexible joint probabilistic forecasting, not faster point prediction." data-explanation-wrong="Ask what TimeGrad models that a simple point forecast does not.">
+          <h3 class="quiz-question">A team only needs tomorrow's average electricity demand as one number. Which TimeGrad advantage matters least?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can read lagged time features.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can sample a flexible multivariate future distribution.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>It can use historical context.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-2">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">Diffusion becomes a forecasting engine</h1>
+      <p class="module-subtitle">The diffusion component learns a reverse process: start from noise, then repeatedly denoise under the current time-series context to generate a future sample.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">One future step as a small generation task</h2>
+      <div class="flow-animation" data-steps='[{"highlight":"flow-actor-1","label":"The historical window is compressed into an RNN context state."},{"highlight":"flow-actor-2","label":"During training, the clean future vector is gradually noised.","packet":true,"from":"actor-1","to":"actor-2"},{"highlight":"flow-actor-3","label":"The network learns the noise direction at the current diffusion level.","packet":true,"from":"actor-2","to":"actor-3"},{"highlight":"flow-actor-4","label":"At inference time, repeated reverse denoising turns white noise into a forecast sample.","packet":true,"from":"actor-3","to":"actor-4"}]'>
+        <div class="flow-actors">
+          <div class="flow-actor" id="flow-actor-1"><div class="flow-actor-icon">R</div><span>RNN state</span></div>
+          <div class="flow-actor" id="flow-actor-2"><div class="flow-actor-icon">N</div><span>Noisy vector</span></div>
+          <div class="flow-actor" id="flow-actor-3"><div class="flow-actor-icon">E</div><span>Noise net</span></div>
+          <div class="flow-actor" id="flow-actor-4"><div class="flow-actor-icon">S</div><span>Forecast sample</span></div>
+        </div>
+        <div class="flow-packet" id="flow-packet"></div>
+        <div class="flow-step-label" id="flow-label">Click "Next" to begin</div>
+        <div class="flow-controls">
+          <button class="btn flow-next-btn">Next</button>
+          <button class="btn flow-reset-btn">Restart</button>
+          <span class="flow-progress"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">The compact equation</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">EQUATION</span>
+          <pre><code><span class="code-line">x_n = sqrt(alpha_bar_n) x_0</span>
+<span class="code-line">    + sqrt(1 - alpha_bar_n) epsilon</span>
+<span class="code-line"></span>
+<span class="code-line">epsilon_theta(x_n, h, n) -> epsilon</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">Take the true vector and mix in Gaussian noise according to the diffusion level.</p>
+            <p class="tl">The diffusion level n controls how damaged the vector is.</p>
+            <p class="tl">The model learns to recover the noise while using the RNN state as context.</p>
+          </div>
+        </div>
+      </div>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">x_0</code><span class="badge-desc">the clean observed vector at one time step</span></div>
+        <div class="badge-item"><code class="badge-code">h</code><span class="badge-desc">the RNN hidden state summarizing history</span></div>
+        <div class="badge-item"><code class="badge-code">n</code><span class="badge-desc">the current diffusion noise level</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module2">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="Noise prediction is the handle that lets the reverse diffusion chain generate samples." data-explanation-wrong="The key is not the notation itself, but how training creates a usable reverse sampling process.">
+          <h3 class="quiz-question">Why train a noise predictor instead of directly outputting only a mean forecast?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because means are never useful in forecasting.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because RNNs cannot output numerical values.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because it defines the reverse denoising chain used for sampling.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-3">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">Training and sampling mirror each other</h1>
+      <p class="module-subtitle">Training asks: can the network identify the noise that was added? Sampling asks: can the network remove noise step by step to create a future?</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Figure 1: the full method in one picture</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 1</span>
+          <img src="paper-assets/figure1-timegrad-schematic.png" alt="TimeGrad schematic" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Bottom: the RNN receives the previous observation and covariates.</p>
+            <p class="tl">Middle: hidden state h conditions the diffusion reverse model.</p>
+            <p class="tl">Top: the fixed forward chain adds noise; the learned reverse chain removes it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Algorithm 2 in plain language</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">ALGORITHM</span>
+          <img src="paper-assets/algorithm2-sampling.png" alt="Algorithm 2 sampling process" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">Start from random noise at the highest diffusion level.</p>
+            <p class="tl">Move backward through the noise levels and use epsilon_theta to choose a denoising direction.</p>
+            <p class="tl">Except for the final step, inject a small random term to preserve uncertainty.</p>
+            <p class="tl">The output is one sampled future vector for time t.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-info">
+        <div class="callout-icon">i</div>
+        <div class="callout-content">
+          <strong class="callout-title">Sampling cost is part of the method</strong>
+          <p>The model needs many reverse steps, and often many sampled trajectories. That is why the ablation on diffusion length N matters.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module3">
+        <div class="quiz-question-block" data-correct="option-a" data-explanation-right="Fewer trajectories make empirical quantiles and distribution scores noisier." data-explanation-wrong="S affects inference-time sampling estimates, not the number of trained parameters or whether the training loss exists.">
+          <h3 class="quiz-question">If inference uses only 5 sampled trajectories instead of 100, what is most likely to degrade first?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Prediction intervals and CRPS estimates become less stable.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The model loses most of its parameters.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The training loss can no longer be computed.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-4">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">Architecture breakdown</h1>
+      <p class="module-subtitle">TimeGrad has two cooperating parts: an autoregressive context model and a conditional denoising network.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Click the components</h2>
+      <div class="arch-diagram">
+        <div class="arch-zone">
+          <h4 class="arch-zone-label">Forecasting pipeline</h4>
+          <div class="arch-component" data-desc="Historical windows, lag features, known time features, and optional entity embeddings enter the context model." onclick="showArchDesc(this)">
+            <div class="arch-icon">H</div><span>Inputs</span>
+          </div>
+          <div class="arch-component" data-desc="The LSTM compresses the past into h_{t-1}, which conditions each future denoising process." onclick="showArchDesc(this)">
+            <div class="arch-icon">R</div><span>RNN</span>
+          </div>
+          <div class="arch-component" data-desc="The residual ConvNet predicts noise epsilon at a given diffusion level n." onclick="showArchDesc(this)">
+            <div class="arch-icon">D</div><span>Denoiser</span>
+          </div>
+          <div class="arch-component" data-desc="Multiple sampled trajectories are summarized into medians, prediction intervals, and CRPS estimates." onclick="showArchDesc(this)">
+            <div class="arch-icon">Q</div><span>Quantiles</span>
+          </div>
+        </div>
+        <div class="arch-description" id="arch-desc">Click any component to learn what it does.</div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Residual block details</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 2</span>
+          <img src="paper-assets/figure2-residual-block.png" alt="Residual block architecture" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">The noisy vector enters through convolutional layers.</p>
+            <p class="tl">The diffusion index n is embedded so the network knows the current noise level.</p>
+            <p class="tl">The RNN state h is injected as conditioning information.</p>
+            <p class="tl">Residual and skip paths help deep denoising blocks remain trainable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module4">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="The diffusion chain can still exist, but it is no longer conditioned on the current temporal context." data-explanation-wrong="The main loss is conditional context, not the existence of Gaussian noise or the CRPS formula.">
+          <h3 class="quiz-question">If h_{t-1} is removed from the denoising network, what is the cleanest failure interpretation?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The model cannot add Gaussian noise.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>The reverse process no longer knows the current history.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>All dataset dimensions must become 1.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-5">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">How the evidence works</h1>
+      <p class="module-subtitle">The experiments support TimeGrad as a strong probabilistic forecaster, especially when evaluated with distribution-aware metrics.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">First inspect the data scale</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">TABLE 1</span>
+          <img src="paper-assets/table1-datasets.png" alt="Dataset table" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Dimension D ranges from 8 to 2000.</p>
+            <p class="tl">Frequencies include daily, hourly, and 30-minute data.</p>
+            <p class="tl">Prediction lengths are 24 or 30 steps, so samples must form full future paths.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Then read the benchmark table</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">TABLE 2</span>
+          <img src="paper-assets/table2-crps.png" alt="CRPS comparison table" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">EVIDENCE CHAIN</span>
+          <div class="translation-lines">
+            <p class="tl">Claim: flexible sampling improves multivariate probabilistic forecasts.</p>
+            <p class="tl">Metric: <span class="term" data-definition="CRPS measures how well a predicted distribution matches the observed value. Lower is better.">CRPS_sum</span>, a distribution score.</p>
+            <p class="tl">Result: TimeGrad is best or near-best on most datasets.</p>
+            <p class="tl">Caveat: the table does not measure latency or memory cost.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Ablation: how many diffusion steps?</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 3</span>
+          <img src="paper-assets/figure3-diffusion-length.png" alt="Diffusion length ablation" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">WHAT IT SHOWS</span>
+          <div class="translation-lines">
+            <p class="tl">Quality improves sharply as N grows from very small values.</p>
+            <p class="tl">The paper reports good performance already around N = 10.</p>
+            <p class="tl">The best setting is around N = 100, but larger is not automatically better.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module5">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="Table 2 is quality evidence; real deployment also needs cost and calibration evidence." data-explanation-wrong="Pretty plots help intuition, but the missing evidence is the quality-cost tradeoff.">
+          <h3 class="quiz-question">A company wants to deploy TimeGrad online. What evidence is most missing from Table 2?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Only more qualitative prediction screenshots.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>A new definition of time series.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Latency, sampling cost, and calibration under deployment constraints.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-6">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">Limits, reproduction, and reuse</h1>
+      <p class="module-subtitle">The method is powerful, but its evidence travels with its assumptions: autoregressive sampling, baseline choices, preprocessing, and diffusion hyperparameters.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Prediction intervals help, but they are not the full proof</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 4</span>
+          <img src="paper-assets/figure4-prediction-intervals.png" alt="Prediction interval figure" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Blue lines are observed values; green bands are prediction intervals.</p>
+            <p class="tl">The figure shows that the model outputs uncertainty bands, not only a median curve.</p>
+            <p class="tl">It is qualitative evidence. The stronger claim still depends on CRPS across datasets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Reproduction checklist</h2>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">Data</code><span class="badge-desc">dataset versions, rolling windows, scaling, missing values, train/validation/test boundaries</span></div>
+        <div class="badge-item"><code class="badge-code">Model</code><span class="badge-desc">LSTM hidden size, residual blocks, dilation schedule, embeddings, lag features</span></div>
+        <div class="badge-item"><code class="badge-code">Diffusion</code><span class="badge-desc">noise schedule, diffusion length N, sampled trajectories S, random seeds</span></div>
+        <div class="badge-item"><code class="badge-code">Eval</code><span class="badge-desc">CRPS_sum implementation, baseline implementations, repeated-run statistics</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">What this paper does not prove</h2>
+      <div class="callout callout-warning">
+        <div class="callout-icon">!</div>
+        <div class="callout-content">
+          <strong class="callout-title">Boundary check</strong>
+          <p>It does not prove that TimeGrad is always faster, always better in every domain, or already robust to extreme events and distribution shift. It proves that autoregressive diffusion forecasting is a strong benchmark method under the paper's tested setup.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module6">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="Reuse means rebuilding the evidence chain in the new domain." data-explanation-wrong="A single training curve or copied benchmark table cannot validate a new deployment setting.">
+          <h3 class="quiz-question">You want to use TimeGrad for data center energy forecasting. What is the responsible first validation plan?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Only check whether training loss decreases.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Compare baselines, distribution metrics, calibration, sampling cost, and abnormal periods.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Reuse the Electricity result as proof without new testing.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module6')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module6')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+
+</body>
+</html>

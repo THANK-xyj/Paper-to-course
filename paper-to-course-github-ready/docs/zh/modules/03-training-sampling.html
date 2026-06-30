@@ -1,0 +1,69 @@
+<section class="module" id="module-3">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">训练和采样是一对镜像过程</h1>
+      <p class="module-subtitle">训练时问：网络能不能识别加入的噪声？采样时问：网络能不能一步步移除噪声，生成一个未来？</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">图 1：一张图看完整方法</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 1</span>
+          <img src="paper-assets/figure1-timegrad-schematic.png" alt="TimeGrad 示意图" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读图指南</span>
+          <div class="translation-lines">
+            <p class="tl">底部：RNN 接收上一时刻观测和协变量。</p>
+            <p class="tl">中间：hidden state h 作为条件，进入扩散反向模型。</p>
+            <p class="tl">顶部：固定前向链负责加噪，学习到的反向链负责去噪。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">算法 2 的白话版</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">算法</span>
+          <img src="paper-assets/algorithm2-sampling.png" alt="算法 2 采样过程" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">先从最高扩散层级的随机噪声开始。</p>
+            <p class="tl">沿着噪声层级往回走，用 epsilon_theta 判断去噪方向。</p>
+            <p class="tl">除最后一步外，每一步还会注入少量随机项，保留不确定性。</p>
+            <p class="tl">最终输出的是时间 t 的一个未来向量样本。</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-info">
+        <div class="callout-icon">i</div>
+        <div class="callout-content">
+          <strong class="callout-title">采样成本是方法的一部分</strong>
+          <p>模型需要很多反向步骤，通常还要采样很多条轨迹。所以论文里关于扩散长度 N 的消融实验非常关键。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module3">
+        <div class="quiz-question-block" data-correct="option-a" data-explanation-right="对。采样轨迹更少，会让经验分位数和分布评分更不稳定。" data-explanation-wrong="S 影响的是推理阶段的采样估计，不是模型参数量或训练梯度是否存在。">
+          <h3 class="quiz-question">如果推理时只采样 5 条轨迹，而不是 100 条，最可能先变差的是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>预测区间和 CRPS 估计会更不稳定。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>模型会失去大部分参数。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>训练损失无法计算。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

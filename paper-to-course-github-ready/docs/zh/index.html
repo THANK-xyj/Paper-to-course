@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeGrad 论文互动课</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --color-accent:       #2A7B9B;
+      --color-accent-hover: #1F6280;
+      --color-accent-light: #E4F2F7;
+      --color-accent-muted: #5A9DB8;
+    }
+  </style>
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="nav-inner">
+      <span class="nav-title">TimeGrad 论文互动课</span>
+      <div class="nav-dots" id="nav-dots" role="tablist">
+        <button class="nav-dot" data-target="module-1" data-tooltip="为什么需要 TimeGrad" role="tab" aria-label="模块 1：为什么需要 TimeGrad"></button>
+        <button class="nav-dot" data-target="module-2" data-tooltip="把扩散模型变成预测引擎" role="tab" aria-label="模块 2：把扩散模型变成预测引擎"></button>
+        <button class="nav-dot" data-target="module-3" data-tooltip="训练和采样" role="tab" aria-label="模块 3：训练和采样"></button>
+        <button class="nav-dot" data-target="module-4" data-tooltip="架构拆解" role="tab" aria-label="模块 4：架构拆解"></button>
+        <button class="nav-dot" data-target="module-5" data-tooltip="实验和证据" role="tab" aria-label="模块 5：实验和证据"></button>
+        <button class="nav-dot" data-target="module-6" data-tooltip="边界和复用" role="tab" aria-label="模块 6：边界和复用"></button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+<section class="module" id="module-1">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">为什么需要 TimeGrad</h1>
+      <p class="module-subtitle">这篇论文想解决的不是“点预测更准一点”，而是：很多条相关时间序列一起预测时，怎样生成完整的未来概率分布。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">这篇论文的核心思路</h2>
+      <div class="pattern-cards">
+        <div class="pattern-card" style="border-top-color: var(--color-actor-1)">
+          <div class="pattern-icon" style="background: var(--color-actor-1)">P</div>
+          <h4 class="pattern-title">问题</h4>
+          <p class="pattern-desc">未来某个时间点是一个高维向量，不是一个孤立数字。太阳能站点、交通传感器、网页访问量都会一起波动。</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-2)">
+          <div class="pattern-icon" style="background: var(--color-actor-2)">G</div>
+          <h4 class="pattern-title">Gap</h4>
+          <p class="pattern-desc">很多模型会预设一个输出分布族，比如 Gaussian、copula 或 flow。这样概率密度容易算，但未来分布的形状也被限制住了。</p>
+        </div>
+        <div class="pattern-card" style="border-top-color: var(--color-actor-5)">
+          <div class="pattern-icon" style="background: var(--color-actor-5)">M</div>
+          <h4 class="pattern-title">做法</h4>
+          <p class="pattern-desc">TimeGrad 在每个未来时间步使用一个条件 <span class="term" data-definition="扩散模型学习如何反转逐步加噪的过程。在这里，它把随机噪声变成一个可能的未来向量。">diffusion model</span>。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">把论文主张翻译成人话</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">论文主张</span>
+          <pre><code><span class="code-line">用自回归 RNN 状态</span>
+<span class="code-line">条件化一个去噪扩散模型</span>
+<span class="code-line">从而采样多变量未来分布</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">RNN 负责判断：当前时间序列处在什么上下文里。</p>
+            <p class="tl">扩散网络负责判断：怎样把噪声变成一个合理的未来向量。</p>
+            <p class="tl">重复采样很多次，就能得到很多条可能未来，不确定性也就显现出来了。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module1">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。TimeGrad 的核心优势是灵活的联合概率预测，不是更快地产生一个点预测。" data-explanation-wrong="再想想：TimeGrad 建模的是普通点预测没有覆盖的哪一部分？">
+          <h3 class="quiz-question">如果一个团队只需要明天平均用电量这一个数，TimeGrad 哪个优势最不关键？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能读取滞后时间特征。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能采样灵活的多变量未来分布。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>它能使用历史上下文。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module1')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module1')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-2">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">扩散模型变成预测引擎</h1>
+      <p class="module-subtitle">扩散部分学的是一个反向过程：从噪声开始，在当前时间序列上下文条件下，反复去噪，生成一个未来样本。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">把一个未来时间步看成小型生成任务</h2>
+      <div class="flow-animation" data-steps='[{"highlight":"flow-actor-1","label":"历史窗口先被 RNN 压缩成上下文状态。"},{"highlight":"flow-actor-2","label":"训练时，干净的未来向量会被逐步加噪。","packet":true,"from":"actor-1","to":"actor-2"},{"highlight":"flow-actor-3","label":"网络学习当前扩散层级下的噪声方向。","packet":true,"from":"actor-2","to":"actor-3"},{"highlight":"flow-actor-4","label":"推理时，反复反向去噪，把白噪声变成预测样本。","packet":true,"from":"actor-3","to":"actor-4"}]'>
+        <div class="flow-actors">
+          <div class="flow-actor" id="flow-actor-1"><div class="flow-actor-icon">R</div><span>RNN 状态</span></div>
+          <div class="flow-actor" id="flow-actor-2"><div class="flow-actor-icon">N</div><span>加噪向量</span></div>
+          <div class="flow-actor" id="flow-actor-3"><div class="flow-actor-icon">E</div><span>噪声网络</span></div>
+          <div class="flow-actor" id="flow-actor-4"><div class="flow-actor-icon">S</div><span>预测样本</span></div>
+        </div>
+        <div class="flow-packet" id="flow-packet"></div>
+        <div class="flow-step-label" id="flow-label">点击“下一步”开始</div>
+        <div class="flow-controls">
+          <button class="btn flow-next-btn">下一步</button>
+          <button class="btn flow-reset-btn">重新开始</button>
+          <span class="flow-progress"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">核心公式的压缩版</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">公式</span>
+          <pre><code><span class="code-line">x_n = sqrt(alpha_bar_n) x_0</span>
+<span class="code-line">    + sqrt(1 - alpha_bar_n) epsilon</span>
+<span class="code-line"></span>
+<span class="code-line">epsilon_theta(x_n, h, n) -> epsilon</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">把真实向量拿出来，按扩散层级混入高斯噪声。</p>
+            <p class="tl">扩散层级 n 控制这个向量被破坏到什么程度。</p>
+            <p class="tl">模型训练目标是恢复噪声，同时把 RNN 状态作为上下文。</p>
+          </div>
+        </div>
+      </div>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">x_0</code><span class="badge-desc">某个时间步的干净观测向量</span></div>
+        <div class="badge-item"><code class="badge-code">h</code><span class="badge-desc">概括历史信息的 RNN hidden state</span></div>
+        <div class="badge-item"><code class="badge-code">n</code><span class="badge-desc">当前扩散噪声层级</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module2">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="对。噪声预测是反向扩散链能够生成样本的抓手。" data-explanation-wrong="重点不是符号本身，而是训练如何构造出一个可用的反向采样过程。">
+          <h3 class="quiz-question">为什么训练噪声预测器，而不是只直接输出均值预测？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为均值在预测中永远没有用。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为 RNN 不能输出数值。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为它定义了用于采样的反向去噪链。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-3">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">训练和采样是一对镜像过程</h1>
+      <p class="module-subtitle">训练时问：网络能不能识别加入的噪声？采样时问：网络能不能一步步移除噪声，生成一个未来？</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">图 1：一张图看完整方法</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 1</span>
+          <img src="paper-assets/figure1-timegrad-schematic.png" alt="TimeGrad 示意图" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读图指南</span>
+          <div class="translation-lines">
+            <p class="tl">底部：RNN 接收上一时刻观测和协变量。</p>
+            <p class="tl">中间：hidden state h 作为条件，进入扩散反向模型。</p>
+            <p class="tl">顶部：固定前向链负责加噪，学习到的反向链负责去噪。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">算法 2 的白话版</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">算法</span>
+          <img src="paper-assets/algorithm2-sampling.png" alt="算法 2 采样过程" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">先从最高扩散层级的随机噪声开始。</p>
+            <p class="tl">沿着噪声层级往回走，用 epsilon_theta 判断去噪方向。</p>
+            <p class="tl">除最后一步外，每一步还会注入少量随机项，保留不确定性。</p>
+            <p class="tl">最终输出的是时间 t 的一个未来向量样本。</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-info">
+        <div class="callout-icon">i</div>
+        <div class="callout-content">
+          <strong class="callout-title">采样成本是方法的一部分</strong>
+          <p>模型需要很多反向步骤，通常还要采样很多条轨迹。所以论文里关于扩散长度 N 的消融实验非常关键。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module3">
+        <div class="quiz-question-block" data-correct="option-a" data-explanation-right="对。采样轨迹更少，会让经验分位数和分布评分更不稳定。" data-explanation-wrong="S 影响的是推理阶段的采样估计，不是模型参数量或训练梯度是否存在。">
+          <h3 class="quiz-question">如果推理时只采样 5 条轨迹，而不是 100 条，最可能先变差的是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>预测区间和 CRPS 估计会更不稳定。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>模型会失去大部分参数。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>训练损失无法计算。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-4">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">架构拆解</h1>
+      <p class="module-subtitle">TimeGrad 有两个协作部件：一个自回归上下文模型，一个条件去噪网络。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">点击组件看看它们负责什么</h2>
+      <div class="arch-diagram">
+        <div class="arch-zone">
+          <h4 class="arch-zone-label">预测流水线</h4>
+          <div class="arch-component" data-desc="历史窗口、lag features、已知时间特征，以及可选的实体 embedding，一起进入上下文模型。" onclick="showArchDesc(this)">
+            <div class="arch-icon">H</div><span>输入</span>
+          </div>
+          <div class="arch-component" data-desc="LSTM 把过去压缩成 h_{t-1}，用于条件化每个未来时刻的去噪过程。" onclick="showArchDesc(this)">
+            <div class="arch-icon">R</div><span>RNN</span>
+          </div>
+          <div class="arch-component" data-desc="残差 ConvNet 在给定扩散层级 n 时预测噪声 epsilon。" onclick="showArchDesc(this)">
+            <div class="arch-icon">D</div><span>去噪器</span>
+          </div>
+          <div class="arch-component" data-desc="多条采样轨迹会被汇总成中位数、预测区间和 CRPS 估计。" onclick="showArchDesc(this)">
+            <div class="arch-icon">Q</div><span>分位数</span>
+          </div>
+        </div>
+        <div class="arch-description" id="arch-desc">点击任意组件，查看它的作用。</div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">残差块细节</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 2</span>
+          <img src="paper-assets/figure2-residual-block.png" alt="残差块架构" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">加噪后的向量通过卷积层进入网络。</p>
+            <p class="tl">扩散索引 n 会被 embedding，让网络知道当前噪声层级。</p>
+            <p class="tl">RNN 状态 h 作为条件信息注入网络。</p>
+            <p class="tl">Residual 和 skip path 帮助深层去噪块保持可训练。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module4">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。扩散链仍然可以存在，但它不再被当前时间上下文条件化。" data-explanation-wrong="主要损失的是条件上下文，不是高斯噪声本身或 CRPS 公式。">
+          <h3 class="quiz-question">如果从去噪网络里移除 h_{t-1}，最准确的失败解释是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>模型不能再加入高斯噪声。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>反向过程不再知道当前历史上下文。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>所有数据集维度都必须变成 1。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-5">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">实验中的证据链怎么读</h1>
+      <p class="module-subtitle">实验结果支持 TimeGrad 是一个强概率预测器，尤其是在使用分布感知指标评估时。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">先看数据规模</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">表 1</span>
+          <img src="paper-assets/table1-datasets.png" alt="数据集表格" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读表指南</span>
+          <div class="translation-lines">
+            <p class="tl">维度 D 从 8 到 2000 不等。</p>
+            <p class="tl">数据频率包括日级、小时级和 30 分钟级。</p>
+            <p class="tl">预测长度是 24 或 30 步，所以样本必须形成完整未来路径。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">再读基准测试表</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">表 2</span>
+          <img src="paper-assets/table2-crps.png" alt="CRPS 对比表" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">证据链</span>
+          <div class="translation-lines">
+            <p class="tl">主张：灵活采样能改善多变量概率预测。</p>
+            <p class="tl">指标：<span class="term" data-definition="CRPS 衡量预测分布和真实观测值的匹配程度，数值越低越好。">CRPS_sum</span>，一种分布评分。</p>
+            <p class="tl">结果：TimeGrad 在多数数据集上最好或接近最好。</p>
+            <p class="tl">注意：这张表没有衡量延迟或内存成本。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">消融：扩散步数要多少？</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 3</span>
+          <img src="paper-assets/figure3-diffusion-length.png" alt="扩散长度消融实验" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">它证明了什么</span>
+          <div class="translation-lines">
+            <p class="tl">当 N 从很小的值增大时，预测质量明显改善。</p>
+            <p class="tl">论文报告说，N 约等于 10 时已经有不错表现。</p>
+            <p class="tl">最优设置大约在 N = 100，但更大并不自动更好。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module5">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="对。表 2 是质量证据；真实部署还需要成本和校准证据。" data-explanation-wrong="漂亮图能帮助直觉，但最缺的是质量和成本之间的权衡证据。">
+          <h3 class="quiz-question">如果一家公司想在线部署 TimeGrad，表 2 最缺哪类证据？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>只需要更多定性预测截图。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>需要重新定义什么叫时间序列。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>延迟、采样成本，以及部署约束下的校准表现。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module5')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module5')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="module" id="module-6">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">边界、复现和复用</h1>
+      <p class="module-subtitle">这个方法很强，但证据必须和假设一起搬走：自回归采样、baseline 选择、预处理方式、扩散超参数都不能被忽略。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">预测区间有用，但不是完整证明</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 4</span>
+          <img src="paper-assets/figure4-prediction-intervals.png" alt="预测区间图" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">读图指南</span>
+          <div class="translation-lines">
+            <p class="tl">蓝色线是真实观测；绿色带是预测区间。</p>
+            <p class="tl">这张图说明模型输出的是不确定性区间，而不只是中位数曲线。</p>
+            <p class="tl">它是定性证据。更强的结论仍然依赖跨数据集的 CRPS 结果。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">复现清单</h2>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">Data</code><span class="badge-desc">数据集版本、rolling window、缩放、缺失值、训练/验证/测试边界</span></div>
+        <div class="badge-item"><code class="badge-code">Model</code><span class="badge-desc">LSTM hidden size、残差块、dilation schedule、embedding、lag features</span></div>
+        <div class="badge-item"><code class="badge-code">Diffusion</code><span class="badge-desc">噪声 schedule、扩散长度 N、采样轨迹数 S、随机种子</span></div>
+        <div class="badge-item"><code class="badge-code">Eval</code><span class="badge-desc">CRPS_sum 实现、baseline 实现、重复运行统计方式</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">这篇论文没有证明什么</h2>
+      <div class="callout callout-warning">
+        <div class="callout-icon">!</div>
+        <div class="callout-content">
+          <strong class="callout-title">边界检查</strong>
+          <p>它没有证明 TimeGrad 总是更快、在所有领域总是更好，也没有证明它已经能稳健处理极端事件和分布漂移。它证明的是：在论文测试设定下，自回归扩散预测是一个很强的基准方法。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module6">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。复用不是照搬结论，而是在新领域重建证据链。" data-explanation-wrong="一条训练曲线或照搬旧表格，不能验证新的部署场景。">
+          <h3 class="quiz-question">如果你想把 TimeGrad 用到数据中心能耗预测，第一轮负责任的验证方案是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>只检查训练 loss 是否下降。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>比较 baseline、分布指标、校准、采样成本和异常时段表现。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>直接把 Electricity 结果当作证明，不做新测试。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module6')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module6')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+
+</body>
+</html>

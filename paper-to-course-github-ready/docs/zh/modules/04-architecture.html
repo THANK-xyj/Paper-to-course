@@ -1,0 +1,66 @@
+<section class="module" id="module-4">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">架构拆解</h1>
+      <p class="module-subtitle">TimeGrad 有两个协作部件：一个自回归上下文模型，一个条件去噪网络。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">点击组件看看它们负责什么</h2>
+      <div class="arch-diagram">
+        <div class="arch-zone">
+          <h4 class="arch-zone-label">预测流水线</h4>
+          <div class="arch-component" data-desc="历史窗口、lag features、已知时间特征，以及可选的实体 embedding，一起进入上下文模型。" onclick="showArchDesc(this)">
+            <div class="arch-icon">H</div><span>输入</span>
+          </div>
+          <div class="arch-component" data-desc="LSTM 把过去压缩成 h_{t-1}，用于条件化每个未来时刻的去噪过程。" onclick="showArchDesc(this)">
+            <div class="arch-icon">R</div><span>RNN</span>
+          </div>
+          <div class="arch-component" data-desc="残差 ConvNet 在给定扩散层级 n 时预测噪声 epsilon。" onclick="showArchDesc(this)">
+            <div class="arch-icon">D</div><span>去噪器</span>
+          </div>
+          <div class="arch-component" data-desc="多条采样轨迹会被汇总成中位数、预测区间和 CRPS 估计。" onclick="showArchDesc(this)">
+            <div class="arch-icon">Q</div><span>分位数</span>
+          </div>
+        </div>
+        <div class="arch-description" id="arch-desc">点击任意组件，查看它的作用。</div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">残差块细节</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">图 2</span>
+          <img src="paper-assets/figure2-residual-block.png" alt="残差块架构" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">加噪后的向量通过卷积层进入网络。</p>
+            <p class="tl">扩散索引 n 会被 embedding，让网络知道当前噪声层级。</p>
+            <p class="tl">RNN 状态 h 作为条件信息注入网络。</p>
+            <p class="tl">Residual 和 skip path 帮助深层去噪块保持可训练。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module4">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="对。扩散链仍然可以存在，但它不再被当前时间上下文条件化。" data-explanation-wrong="主要损失的是条件上下文，不是高斯噪声本身或 CRPS 公式。">
+          <h3 class="quiz-question">如果从去噪网络里移除 h_{t-1}，最准确的失败解释是什么？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>模型不能再加入高斯噪声。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>反向过程不再知道当前历史上下文。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>所有数据集维度都必须变成 1。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

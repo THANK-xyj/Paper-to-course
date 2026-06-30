@@ -1,0 +1,64 @@
+<section class="module" id="module-6">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">Limits, reproduction, and reuse</h1>
+      <p class="module-subtitle">The method is powerful, but its evidence travels with its assumptions: autoregressive sampling, baseline choices, preprocessing, and diffusion hyperparameters.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Prediction intervals help, but they are not the full proof</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">FIGURE 4</span>
+          <img src="paper-assets/figure4-prediction-intervals.png" alt="Prediction interval figure" style="width:100%; background:white; border-radius:8px;">
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">READING GUIDE</span>
+          <div class="translation-lines">
+            <p class="tl">Blue lines are observed values; green bands are prediction intervals.</p>
+            <p class="tl">The figure shows that the model outputs uncertainty bands, not only a median curve.</p>
+            <p class="tl">It is qualitative evidence. The stronger claim still depends on CRPS across datasets.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">Reproduction checklist</h2>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">Data</code><span class="badge-desc">dataset versions, rolling windows, scaling, missing values, train/validation/test boundaries</span></div>
+        <div class="badge-item"><code class="badge-code">Model</code><span class="badge-desc">LSTM hidden size, residual blocks, dilation schedule, embeddings, lag features</span></div>
+        <div class="badge-item"><code class="badge-code">Diffusion</code><span class="badge-desc">noise schedule, diffusion length N, sampled trajectories S, random seeds</span></div>
+        <div class="badge-item"><code class="badge-code">Eval</code><span class="badge-desc">CRPS_sum implementation, baseline implementations, repeated-run statistics</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">What this paper does not prove</h2>
+      <div class="callout callout-warning">
+        <div class="callout-icon">!</div>
+        <div class="callout-content">
+          <strong class="callout-title">Boundary check</strong>
+          <p>It does not prove that TimeGrad is always faster, always better in every domain, or already robust to extreme events and distribution shift. It proves that autoregressive diffusion forecasting is a strong benchmark method under the paper's tested setup.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module6">
+        <div class="quiz-question-block" data-correct="option-b" data-explanation-right="Reuse means rebuilding the evidence chain in the new domain." data-explanation-wrong="A single training curve or copied benchmark table cannot validate a new deployment setting.">
+          <h3 class="quiz-question">You want to use TimeGrad for data center energy forecasting. What is the responsible first validation plan?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Only check whether training loss decreases.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Compare baselines, distribution metrics, calibration, sampling cost, and abnormal periods.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Reuse the Electricity result as proof without new testing.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module6')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module6')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>

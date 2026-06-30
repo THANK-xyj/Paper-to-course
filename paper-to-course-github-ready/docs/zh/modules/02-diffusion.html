@@ -1,0 +1,70 @@
+<section class="module" id="module-2">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">扩散模型变成预测引擎</h1>
+      <p class="module-subtitle">扩散部分学的是一个反向过程：从噪声开始，在当前时间序列上下文条件下，反复去噪，生成一个未来样本。</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">把一个未来时间步看成小型生成任务</h2>
+      <div class="flow-animation" data-steps='[{"highlight":"flow-actor-1","label":"历史窗口先被 RNN 压缩成上下文状态。"},{"highlight":"flow-actor-2","label":"训练时，干净的未来向量会被逐步加噪。","packet":true,"from":"actor-1","to":"actor-2"},{"highlight":"flow-actor-3","label":"网络学习当前扩散层级下的噪声方向。","packet":true,"from":"actor-2","to":"actor-3"},{"highlight":"flow-actor-4","label":"推理时，反复反向去噪，把白噪声变成预测样本。","packet":true,"from":"actor-3","to":"actor-4"}]'>
+        <div class="flow-actors">
+          <div class="flow-actor" id="flow-actor-1"><div class="flow-actor-icon">R</div><span>RNN 状态</span></div>
+          <div class="flow-actor" id="flow-actor-2"><div class="flow-actor-icon">N</div><span>加噪向量</span></div>
+          <div class="flow-actor" id="flow-actor-3"><div class="flow-actor-icon">E</div><span>噪声网络</span></div>
+          <div class="flow-actor" id="flow-actor-4"><div class="flow-actor-icon">S</div><span>预测样本</span></div>
+        </div>
+        <div class="flow-packet" id="flow-packet"></div>
+        <div class="flow-step-label" id="flow-label">点击“下一步”开始</div>
+        <div class="flow-controls">
+          <button class="btn flow-next-btn">下一步</button>
+          <button class="btn flow-reset-btn">重新开始</button>
+          <span class="flow-progress"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">核心公式的压缩版</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">公式</span>
+          <pre><code><span class="code-line">x_n = sqrt(alpha_bar_n) x_0</span>
+<span class="code-line">    + sqrt(1 - alpha_bar_n) epsilon</span>
+<span class="code-line"></span>
+<span class="code-line">epsilon_theta(x_n, h, n) -> epsilon</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">白话解释</span>
+          <div class="translation-lines">
+            <p class="tl">把真实向量拿出来，按扩散层级混入高斯噪声。</p>
+            <p class="tl">扩散层级 n 控制这个向量被破坏到什么程度。</p>
+            <p class="tl">模型训练目标是恢复噪声，同时把 RNN 状态作为上下文。</p>
+          </div>
+        </div>
+      </div>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">x_0</code><span class="badge-desc">某个时间步的干净观测向量</span></div>
+        <div class="badge-item"><code class="badge-code">h</code><span class="badge-desc">概括历史信息的 RNN hidden state</span></div>
+        <div class="badge-item"><code class="badge-code">n</code><span class="badge-desc">当前扩散噪声层级</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module2">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="对。噪声预测是反向扩散链能够生成样本的抓手。" data-explanation-wrong="重点不是符号本身，而是训练如何构造出一个可用的反向采样过程。">
+          <h3 class="quiz-question">为什么训练噪声预测器，而不是只直接输出均值预测？</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为均值在预测中永远没有用。</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为 RNN 不能输出数值。</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>因为它定义了用于采样的反向去噪链。</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">检查答案</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">重试</button>
+      </div>
+    </div>
+  </div>
+</section>

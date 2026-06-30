@@ -1,0 +1,70 @@
+<section class="module" id="module-2">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">Diffusion becomes a forecasting engine</h1>
+      <p class="module-subtitle">The diffusion component learns a reverse process: start from noise, then repeatedly denoise under the current time-series context to generate a future sample.</p>
+    </header>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">One future step as a small generation task</h2>
+      <div class="flow-animation" data-steps='[{"highlight":"flow-actor-1","label":"The historical window is compressed into an RNN context state."},{"highlight":"flow-actor-2","label":"During training, the clean future vector is gradually noised.","packet":true,"from":"actor-1","to":"actor-2"},{"highlight":"flow-actor-3","label":"The network learns the noise direction at the current diffusion level.","packet":true,"from":"actor-2","to":"actor-3"},{"highlight":"flow-actor-4","label":"At inference time, repeated reverse denoising turns white noise into a forecast sample.","packet":true,"from":"actor-3","to":"actor-4"}]'>
+        <div class="flow-actors">
+          <div class="flow-actor" id="flow-actor-1"><div class="flow-actor-icon">R</div><span>RNN state</span></div>
+          <div class="flow-actor" id="flow-actor-2"><div class="flow-actor-icon">N</div><span>Noisy vector</span></div>
+          <div class="flow-actor" id="flow-actor-3"><div class="flow-actor-icon">E</div><span>Noise net</span></div>
+          <div class="flow-actor" id="flow-actor-4"><div class="flow-actor-icon">S</div><span>Forecast sample</span></div>
+        </div>
+        <div class="flow-packet" id="flow-packet"></div>
+        <div class="flow-step-label" id="flow-label">Click "Next" to begin</div>
+        <div class="flow-controls">
+          <button class="btn flow-next-btn">Next</button>
+          <button class="btn flow-reset-btn">Restart</button>
+          <span class="flow-progress"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <h2 class="screen-heading">The compact equation</h2>
+      <div class="translation-block animate-in">
+        <div class="translation-code">
+          <span class="translation-label">EQUATION</span>
+          <pre><code><span class="code-line">x_n = sqrt(alpha_bar_n) x_0</span>
+<span class="code-line">    + sqrt(1 - alpha_bar_n) epsilon</span>
+<span class="code-line"></span>
+<span class="code-line">epsilon_theta(x_n, h, n) -> epsilon</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">PLAIN ENGLISH</span>
+          <div class="translation-lines">
+            <p class="tl">Take the true vector and mix in Gaussian noise according to the diffusion level.</p>
+            <p class="tl">The diffusion level n controls how damaged the vector is.</p>
+            <p class="tl">The model learns to recover the noise while using the RNN state as context.</p>
+          </div>
+        </div>
+      </div>
+      <div class="badge-list">
+        <div class="badge-item"><code class="badge-code">x_0</code><span class="badge-desc">the clean observed vector at one time step</span></div>
+        <div class="badge-item"><code class="badge-code">h</code><span class="badge-desc">the RNN hidden state summarizing history</span></div>
+        <div class="badge-item"><code class="badge-code">n</code><span class="badge-desc">the current diffusion noise level</span></div>
+      </div>
+    </div>
+
+    <div class="screen animate-in">
+      <div class="quiz-container" id="quiz-module2">
+        <div class="quiz-question-block" data-correct="option-c" data-explanation-right="Noise prediction is the handle that lets the reverse diffusion chain generate samples." data-explanation-wrong="The key is not the notation itself, but how training creates a usable reverse sampling process.">
+          <h3 class="quiz-question">Why train a noise predictor instead of directly outputting only a mean forecast?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because means are never useful in forecasting.</span></button>
+            <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because RNNs cannot output numerical values.</span></button>
+            <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Because it defines the reverse denoising chain used for sampling.</span></button>
+          </div>
+          <div class="quiz-feedback"></div>
+        </div>
+        <button class="quiz-check-btn" onclick="checkQuiz('quiz-module2')">Check Answer</button>
+        <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module2')">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
